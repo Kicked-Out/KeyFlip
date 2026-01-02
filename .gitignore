@@ -1,0 +1,25 @@
+# ===== Go =====
+/bin/
+/dist/
+*.exe
+*.out
+*.test
+
+# Go build cache
+/pkg/
+/tmp/
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== IDE =====
+.vscode/
+.idea/
+*.swp
+
+# ===== Logs =====
+*.log
+
+# ===== Website build (якщо буде) =====
+website/dist/
