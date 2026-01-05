@@ -46,30 +46,24 @@ static void keyflip_startHotkeyListener(void) {
 import "C"
 
 import (
-	"fmt"
 	"sync/atomic"
 	"time"
 )
 
 var hotkeyHandler func()
-
-
 var lastFire int64
 
-
+//export OnHotkey
 func OnHotkey() {
 	now := time.Now().UnixNano()
 	prev := atomic.LoadInt64(&lastFire)
 
-	/
+	// 250ms debounce
 	if now-prev < int64(250*time.Millisecond) {
 		return
 	}
 	atomic.StoreInt64(&lastFire, now)
 
-	fmt.Println("HOTKEY FIRED")
-
-	
 	if hotkeyHandler != nil {
 		go hotkeyHandler()
 	}
