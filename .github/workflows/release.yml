@@ -7,12 +7,8 @@ on:
       - testVersionENtoUA
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [macos-latest]
-
-    runs-on: ${{ matrix.os }}
+  build-macos:
+    runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -24,4 +20,4 @@ jobs:
 
       - name: Build macOS binary
         run: |
-          go build ./platforms/macos
+          go build -o keyflip-macos ./platforms/macos/main.go
