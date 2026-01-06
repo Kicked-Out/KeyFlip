@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"sync"
 	"time"
 
@@ -12,7 +11,23 @@ import (
 var (
 	enToUa     = true
 	stateMutex sync.Mutex
+	processing sync.Mutex
 )
+
+
+func waitForClipboardChange(original string, timeout time.Duration) (string, bool) {
+	deadline := time.Now().Add(timeout)
+
+	for time.Now().Before(deadline) {
+		text, err := macos.ReadClipboard()
+		if err == nil && text != "" && text != original {
+			return text, true
+		}
+		time.Sleep(30 * time.Millisecond)
+	}
+
+	return "", false
+}
 
 func main() {
 	macos.StartHotkeyListener(process)
@@ -20,6 +35,12 @@ func main() {
 }
 
 func process() {
+	
+	if !processing.TryLock() {
+		return
+	}
+	defer processing.Unlock()
+
 	
 	stateMutex.Lock()
 	currentEnToUa := enToUa
@@ -32,40 +53,38 @@ func process() {
 		mapping = core.UaToEn
 	}
 
+	
 	originalClipboard, err := macos.ReadClipboard()
 	if err != nil {
 		originalClipboard = ""
 	}
 
+	
 	time.Sleep(60 * time.Millisecond)
 
+	
 	macos.CmdC()
-	time.Sleep(200 * time.Millisecond)
 
-	text, err := macos.ReadClipboard()
-	if err != nil {
-		_ = macos.WriteClipboard(originalClipboard)
+
+	text, ok := waitForClipboardChange(originalClipboard, 350*time.Millisecond)
+	if !ok {
 		return
 	}
 
 	
-	if text == "" || bytes.Equal([]byte(text), []byte(originalClipboard)) {
-		return
-	}
-
-	println("COPIED:", text)
-
 	out := core.Transform(text, mapping)
-	println("TRANSFORMED:", out)
+
 
 	if err := macos.WriteClipboard(out); err != nil {
 		_ = macos.WriteClipboard(originalClipboard)
 		return
 	}
 
+	
 	time.Sleep(120 * time.Millisecond)
 	macos.CmdV()
 
+	
 	time.Sleep(80 * time.Millisecond)
 	_ = macos.WriteClipboard(originalClipboard)
 
