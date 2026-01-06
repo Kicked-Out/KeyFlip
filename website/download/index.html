@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>KeyFlip - Download</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+        <style>
+            body {
+                font-family: "Inter", sans-serif;
+            }
+        </style>
+    </head>
+    <body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+        <header class="bg-gray-800/50 backdrop-blur-md border-b border-gray-700 sticky top-0 z-10">
+            <nav class="container mx-auto px-6 py-5 flex justify-between items-center">
+                <a
+                    href="./"
+                    class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
+                >
+                    KeyFlip
+                </a>
+                <ul class="flex space-x-10 text-lg">
+                    <li><a href="../" class="hover:text-blue-400 transition">Home</a></li>
+                    <li><a href="../docs/" class="hover:text-blue-400 transition">Docs</a></li>
+                    <li><a href="../download/" class="hover:text-blue-400 transition">Download</a></li>
+                    <li>
+                        <a
+                            href="https://github.com/keyflip/keyflip"
+                            target="_blank"
+                            class="hover:text-blue-400 transition flex items-center gap-2"
+                            ><i class="fab fa-github"></i> GitHub</a
+                        >
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="container mx-auto px-6 py-16 max-w-4xl flex-grow">
+            <h1
+                class="text-5xl md:text-6xl font-bold text-center mb-12 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
+            >
+                Download KeyFlip
+            </h1>
+
+            <p class="text-xl text-center text-gray-300 mb-16">
+                Open-source and free. Source code and releases hosted on GitHub.
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-10">
+                <!-- macOS -->
+                <div class="bg-gray-800 rounded-2xl p-10 text-center shadow-2xl border border-gray-700">
+                    <i class="fab fa-apple text-6xl text-gray-400 mb-6"></i>
+                    <h2 class="text-3xl font-bold mb-4">macOS</h2>
+                    <p class="text-gray-300 mb-8">Intel & Apple Silicon · macOS 12+</p>
+                    <a
+                        href="https://github.com/keyflip/keyflip/releases/latest"
+                        class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-12 py-5 rounded-xl text-xl font-semibold transition shadow-lg hover:shadow-2xl transform hover:-translate-y-1 inline-block"
+                    >
+                        Download
+                    </a>
+                    <p class="mt-6 text-gray-400 text-sm">Universal binary</p>
+                </div>
+
+                <!-- Windows -->
+                <div class="bg-gray-800/50 rounded-2xl p-10 text-center shadow-2xl border border-gray-800 opacity-60">
+                    <i class="fab fa-windows text-6xl text-gray-500 mb-6"></i>
+                    <h2 class="text-3xl font-bold mb-4">Windows</h2>
+                    <p class="text-gray-400 mb-8">Coming soon</p>
+                    <p class="text-lg text-gray-500">Planned</p>
+                </div>
+
+                <!-- Linux -->
+                <div class="bg-gray-800/50 rounded-2xl p-10 text-center shadow-2xl border border-gray-800 opacity-60">
+                    <i class="fab fa-linux text-6xl text-gray-500 mb-6"></i>
+                    <h2 class="text-3xl font-bold mb-4">Linux</h2>
+                    <p class="text-gray-400 mb-8">Coming soon</p>
+                    <p class="text-lg text-gray-500">Planned</p>
+                </div>
+            </div>
+
+            <div class="mt-20 text-center">
+                <p class="text-xl text-gray-300 mb-8">All releases, checksums, and source code available on GitHub.</p>
+                <a
+                    href="https://github.com/keyflip/keyflip/releases"
+                    class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-10 py-5 rounded-xl text-xl font-semibold transition shadow-lg hover:shadow-2xl transform hover:-translate-y-1 inline-block"
+                >
+                    View Releases on GitHub
+                </a>
+            </div>
+        </main>
+
+        <footer class="bg-gray-800/50 backdrop-blur-md py-8 text-center text-gray-400">
+            <p>
+                © 2026 KeyFlip • Open source •
+                <a href="https://github.com/keyflip/keyflip" class="hover:text-blue-400">GitHub</a>
+            </p>
+        </footer>
+    </body>
+</html>

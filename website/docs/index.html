@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>KeyFlip - Documentation</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+        <style>
+            body {
+                font-family: "Inter", sans-serif;
+            }
+        </style>
+    </head>
+    <body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+        <header class="bg-gray-800/50 backdrop-blur-md border-b border-gray-700 sticky top-0 z-10">
+            <nav class="container mx-auto px-6 py-5 flex justify-between items-center">
+                <a
+                    href="./"
+                    class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
+                >
+                    KeyFlip
+                </a>
+                <ul class="flex space-x-10 text-lg">
+                    <li><a href="../" class="hover:text-blue-400 transition">Home</a></li>
+                    <li><a href="../docs/" class="hover:text-blue-400 transition">Docs</a></li>
+                    <li><a href="../download/" class="hover:text-blue-400 transition">Download</a></li>
+                    <li>
+                        <a
+                            href="https://github.com/keyflip/keyflip"
+                            target="_blank"
+                            class="hover:text-blue-400 transition flex items-center gap-2"
+                            ><i class="fab fa-github"></i> GitHub</a
+                        >
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="container mx-auto px-6 py-16 max-w-5xl flex-grow">
+            <h1
+                class="text-5xl md:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
+            >
+                Documentation
+            </h1>
+
+            <section class="mb-20">
+                <h2 class="text-3xl font-bold mb-8">How KeyFlip Works</h2>
+                <p class="text-lg text-gray-300 leading-relaxed">
+                    KeyFlip runs in the background and listens for a global hotkey (default: ⌘⇧K). When you press it
+                    with text selected, KeyFlip instantly flips the selected text between English and Ukrainian keyboard
+                    layouts. It works system-wide in any app—no switching layouts or retyping required.
+                </p>
+                <p class="text-lg text-gray-300 leading-relaxed mt-4">
+                    The conversion is bidirectional: pressing the hotkey again on the same text flips it back.
+                </p>
+            </section>
+
+            <section class="mb-20">
+                <h2 class="text-3xl font-bold mb-8">Installation (macOS)</h2>
+                <ol class="list-decimal list-inside space-y-6 text-lg text-gray-300">
+                    <li>
+                        Download the latest release from the
+                        <a href="../download/" class="text-blue-400 hover:underline">Download page</a> or GitHub
+                        Releases.
+                    </li>
+                    <li>
+                        Unzip and move <code class="bg-gray-800 px-2 py-1 rounded">KeyFlip.app</code> to your
+                        Applications folder.
+                    </li>
+                    <li>Open the app. macOS will prompt for permissions.</li>
+                    <li>
+                        Go to <strong>System Settings → Privacy & Security → Accessibility</strong> and enable KeyFlip.
+                    </li>
+                    <li>If prompted, also allow <strong>Input Monitoring</strong>.</li>
+                </ol>
+                <p class="mt-8 text-lg text-gray-300">
+                    After granting permissions, KeyFlip will start automatically on login (you can adjust this in Login
+                    Items).
+                </p>
+            </section>
+
+            <section class="mb-20">
+                <h2 class="text-3xl font-bold mb-8">Using the Hotkey</h2>
+                <p class="text-lg text-gray-300 leading-relaxed">
+                    1. Select the incorrectly typed text in any application.<br />
+                    2. Press <kbd class="bg-gray-800 px-3 py-1 rounded">⌘⇧K</kbd>.<br />
+                    3. The selected text is instantly replaced with the correct version.
+                </p>
+                <div class="mt-10 grid md:grid-cols-2 gap-10">
+                    <div class="bg-gray-800 p-8 rounded-xl">
+                        <p class="text-xl font-semibold mb-4">Before</p>
+                        <p class="text-2xl font-mono">руддщ, світе!</p>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-xl">
+                        <p class="text-xl font-semibold mb-4">After hotkey</p>
+                        <p class="text-2xl font-mono">hello, world!</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-20">
+                <h2 class="text-3xl font-bold mb-8">CLI Mode</h2>
+                <p class="text-lg text-gray-300 leading-relaxed">
+                    KeyFlip also works from the terminal for one-off conversions:
+                </p>
+                <pre class="bg-gray-800 p-6 rounded-xl mt-6 text-lg overflow-x-auto"><code>keyflip "руддщ"</code></pre>
+                <p class="mt-4 text-lg text-gray-300">
+                    Output: <code class="bg-gray-800 px-2 py-1 rounded">hello</code>
+                </p>
+                <p class="mt-6 text-lg text-gray-300">
+                    Pipe support: <code class="bg-gray-800 px-2 py-1 rounded">echo "руддщ" | keyflip</code>
+                </p>
+            </section>
+
+            <section class="mb-20">
+                <h2 class="text-3xl font-bold mb-8">Permissions Explained</h2>
+                <p class="text-lg text-gray-300 leading-relaxed">
+                    KeyFlip requires Accessibility permission to read selected text and simulate input to replace it.<br />
+                    Input Monitoring is needed to detect the global hotkey system-wide.<br />
+                    No data is sent anywhere—everything happens locally.
+                </p>
+            </section>
+
+            <section class="mb-20">
+                <h2 class="text-3xl font-bold mb-8">FAQ</h2>
+                <dl class="space-y-8">
+                    <div>
+                        <dt class="text-xl font-semibold">Does KeyFlip change my system keyboard layout?</dt>
+                        <dd class="text-lg text-gray-300 mt-2">No. It only transforms the selected text.</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xl font-semibold">Is my typing tracked or sent anywhere?</dt>
+                        <dd class="text-lg text-gray-300 mt-2">No. KeyFlip works entirely offline and locally.</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xl font-semibold">Can I change the hotkey?</dt>
+                        <dd class="text-lg text-gray-300 mt-2">
+                            Not yet, but it's planned. Contributions welcome on GitHub.
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-xl font-semibold">Will it support other language pairs?</dt>
+                        <dd class="text-lg text-gray-300 mt-2">
+                            English ↔ Ukrainian is the current focus. More pairs can be added via contributions.
+                        </dd>
+                    </div>
+                </dl>
+            </section>
+        </main>
+
+        <footer class="bg-gray-800/50 backdrop-blur-md py-8 text-center text-gray-400">
+            <p>
+                © 2026 KeyFlip • Open source •
+                <a href="https://github.com/keyflip/keyflip" class="hover:text-blue-400">GitHub</a>
+            </p>
+        </footer>
+    </body>
+</html>
