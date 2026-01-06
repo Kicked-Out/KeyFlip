@@ -69,7 +69,7 @@ func OnHotkey() {
 	atomic.StoreInt64(&lastFire, now)
 
 	if h := hotkeyHandler.Load(); h != nil {
-+		go (*h)()
+		go (*h)()
 	}
 }
 
