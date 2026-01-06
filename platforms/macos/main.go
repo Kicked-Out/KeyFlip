@@ -15,7 +15,10 @@ func main() {
 }
 
 func process() {
-	originalClipboard, _ := macos.ReadClipboard()
+	originalClipboard, err := macos.ReadClipboard()
++	if err != nil {
++		println("WARN: could not read original clipboard:", err.Error())
++		originalClipboard = ""
 
 	time.Sleep(60 * time.Millisecond)
 
@@ -40,7 +43,11 @@ func process() {
 	out := core.Transform(text, core.EnToUa)
 	println("TRANSFORMED:", out)
 
-	_ = macos.WriteClipboard(out)
+	if err := macos.WriteClipboard(out); err != nil {
++		println("WRITE ERR:", err.Error())
++		_ = macos.WriteClipboard(originalClipboard)
++		return
++	}
 	time.Sleep(120 * time.Millisecond)
 	macos.CmdV()
 

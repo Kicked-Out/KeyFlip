@@ -35,7 +35,11 @@ static void keyflip_startHotkeyListener(void) {
         NULL
     );
 
-    if (!tap) return;
+    if (!tap) {
+        fprintf(stderr, "KeyFlip: failed to create event tap. Check Accessibility permissions.\n");
+        return;
+    }
+
 
     CFRunLoopSourceRef source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0);
     CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopCommonModes);
@@ -50,7 +54,7 @@ import (
 	"time"
 )
 
-var hotkeyHandler func()
+var hotkeyHandler atomic.Pointer[func()]
 var lastFire int64
 
 //export OnHotkey
@@ -64,12 +68,12 @@ func OnHotkey() {
 	}
 	atomic.StoreInt64(&lastFire, now)
 
-	if hotkeyHandler != nil {
-		go hotkeyHandler()
+	if h := hotkeyHandler.Load(); h != nil {
++		go (*h)()
 	}
 }
 
 func StartHotkeyListener(handler func()) {
-	hotkeyHandler = handler
+	hotkeyHandler.Store(&handler)
 	go C.keyflip_startHotkeyListener()
 }
