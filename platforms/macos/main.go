@@ -19,6 +19,7 @@ func process() {
 +	if err != nil {
 +		println("WARN: could not read original clipboard:", err.Error())
 +		originalClipboard = ""
++	}
 
 	time.Sleep(60 * time.Millisecond)
 
