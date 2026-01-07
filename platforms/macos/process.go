@@ -1,11 +1,10 @@
-package main
+package macos
 
 import (
 	"sync"
 	"time"
 
 	"github.com/Kicked-Out/KeyFlip/core"
-	macos "github.com/Kicked-Out/KeyFlip/platforms/macos/macos"
 )
 
 var (
@@ -14,34 +13,28 @@ var (
 	processing sync.Mutex
 )
 
-
 func waitForClipboardChange(original string, timeout time.Duration) (string, bool) {
 	deadline := time.Now().Add(timeout)
 
 	for time.Now().Before(deadline) {
-		text, err := macos.ReadClipboard()
+		text, err := ReadClipboard()
 		if err == nil && text != "" && text != original {
 			return text, true
 		}
 		time.Sleep(30 * time.Millisecond)
 	}
-
 	return "", false
 }
 
-func main() {
-	macos.StartHotkeyListener(process)
-	select {}
-}
-
-func process() {
-	
+// Process — головна логіка daemon
+func Process() {
+	// не допускаємо паралельного виконання
 	if !processing.TryLock() {
 		return
 	}
 	defer processing.Unlock()
 
-	
+	// визначаємо напрямок
 	stateMutex.Lock()
 	currentEnToUa := enToUa
 	stateMutex.Unlock()
@@ -53,42 +46,38 @@ func process() {
 		mapping = core.UaToEn
 	}
 
-	
-	originalClipboard, err := macos.ReadClipboard()
+	// зберігаємо clipboard
+	originalClipboard, err := ReadClipboard()
 	if err != nil {
 		originalClipboard = ""
 	}
 
-	
 	time.Sleep(60 * time.Millisecond)
 
-	
-	macos.CmdC()
+	// копіюємо виділення
+	CmdC()
 
-
+	// чекаємо реальної зміни clipboard
 	text, ok := waitForClipboardChange(originalClipboard, 350*time.Millisecond)
 	if !ok {
 		return
 	}
 
-	
+	// трансформація
 	out := core.Transform(text, mapping)
 
-
-	if err := macos.WriteClipboard(out); err != nil {
-		_ = macos.WriteClipboard(originalClipboard)
+	if err := WriteClipboard(out); err != nil {
+		_ = WriteClipboard(originalClipboard)
 		return
 	}
 
-	
 	time.Sleep(120 * time.Millisecond)
-	macos.CmdV()
+	CmdV()
 
-	
 	time.Sleep(80 * time.Millisecond)
-	_ = macos.WriteClipboard(originalClipboard)
+	_ = WriteClipboard(originalClipboard)
 
-	
+	// toggle напрямку
 	stateMutex.Lock()
 	enToUa = !enToUa
 	stateMutex.Unlock()
