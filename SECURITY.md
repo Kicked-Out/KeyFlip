@@ -20,7 +20,6 @@ If you discover a security vulnerability, **do not open a public issue**.
 Instead, report it responsibly using one of the following methods:
 
 - GitHub Security Advisories (preferred)
-- Email: **security@yourdomain.com** *(replace with a real address)*
 
 Please include:
 - A clear description of the vulnerability
@@ -81,3 +80,4 @@ If applicable, valid reports may be credited in release notes or advisories.
 ## No Bug Bounty
 
 This project does **not** offer a bug bounty program at this time.
+
