@@ -2,6 +2,7 @@ package macos
 
 import (
 	"fmt"
+	"html"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -32,6 +33,8 @@ func InstallLaunchd(binaryPath string) error {
 		return err
 	}
 
+	escapedPath := html.EscapeString(binaryPath)
+
 	plist := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
 "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -45,6 +48,14 @@ func InstallLaunchd(binaryPath string) error {
 		<string>%s</string>
 	</array>
 
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>LANG</key>
+		<string>en_US.UTF-8</string>
+		<key>LC_ALL</key>
+		<string>en_US.UTF-8</string>
+	</dict>
+
 	<key>RunAtLoad</key>
 	<true/>
 
@@ -52,7 +63,7 @@ func InstallLaunchd(binaryPath string) error {
 	<true/>
 </dict>
 </plist>
-`, launchdLabel, binaryPath)
+`, launchdLabel, escapedPath)
 
 	if err := os.WriteFile(path, []byte(plist), 0o644); err != nil {
 		return err
