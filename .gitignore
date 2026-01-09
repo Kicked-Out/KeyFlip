@@ -2,8 +2,15 @@
 /bin/
 /dist/
 *.exe
+*.exe~
 *.out
 *.test
+*.dll
+*.so
+*.dylib
+
+# Go workspace file
+go.work
 
 # Go build cache
 /pkg/
