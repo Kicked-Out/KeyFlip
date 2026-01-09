@@ -8,12 +8,14 @@ import (
 	"path/filepath"
 )
 
+// Config represents the application configuration
 type Config struct {
 	From   string `json:"from"`
 	To     string `json:"to"`
 	Hotkey string `json:"hotkey"`
 }
 
+// Returns the default configuration, hotkey is just a text here the real hotkey handling in listener
 func defaultConfig() Config {
 	return Config{
 		From:   "en",
@@ -22,6 +24,7 @@ func defaultConfig() Config {
 	}
 }
 
+// Returns the path to the config file
 func configPath() (string, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -31,6 +34,7 @@ func configPath() (string, error) {
 	return filepath.Join(dir, "config.json"), nil
 }
 
+// Loads the configuration from file, if not exists creates default
 func LoadConfig() (Config, error) {
 	path, err := configPath()
 	if err != nil {
@@ -42,7 +46,7 @@ func LoadConfig() (Config, error) {
 		if os.IsNotExist(err) {
 			cfg := defaultConfig()
 			if saveErr := SaveConfig(cfg); saveErr != nil {
-				// Log or return wrapped error
+				
 				return cfg, fmt.Errorf("config not found, failed to create default: %w", saveErr)
 			}
 			return cfg, nil
@@ -50,12 +54,13 @@ func LoadConfig() (Config, error) {
 		return Config{}, err
 	}
 
+	// Parse JSON
 	var cfg Config
 	if err := json.Unmarshal(b, &cfg); err != nil {
 		return Config{}, err
 	}
 
-	// мінімальна валідація
+	// Basic validation
 	if cfg.From == "" || cfg.To == "" {
 		return Config{}, errors.New("invalid config: from/to must not be empty")
 	}
@@ -63,6 +68,7 @@ func LoadConfig() (Config, error) {
 	return cfg, nil
 }
 
+// Saves the configuration to file
 func SaveConfig(cfg Config) error {
 	path, err := configPath()
 	if err != nil {

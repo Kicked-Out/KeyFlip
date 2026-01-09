@@ -24,3 +24,6 @@ Thumbs.db
 # ===== Website =====
 website/dist/
 website/gpt/
+
+# ===== KeyFlip binary file =====
+keyflip

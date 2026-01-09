@@ -1,5 +1,7 @@
 package macos
 
+// C mechanism to simulate Cmd+C and Cmd+V key presses
+
 /*
 #cgo CFLAGS: -x objective-c
 #cgo LDFLAGS: -framework ApplicationServices

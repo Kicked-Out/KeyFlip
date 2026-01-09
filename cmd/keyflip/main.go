@@ -8,8 +8,9 @@ import (
 
 	macos "github.com/Kicked-Out/KeyFlip/platforms/macos"
 )
-
+// This file is entry point for KeyFlip application. Decides whether to run as daemon or CLI based on arguments.
 func main() {
+	// If there are any command-line arguments, run as CLI, if not, run as daemon
 	if len(os.Args) > 1 {
 		runCLI(os.Args[1:])
 		return
@@ -19,7 +20,7 @@ func main() {
 
 func runDaemon() {
 	fmt.Println("KeyFlip daemon starting...")
-
+	// Load config and start hotkey listener
 	macos.StartHotkeyListener(func() {
 		cfg, err := macos.LoadConfig()
 		if err != nil {
@@ -28,7 +29,7 @@ func runDaemon() {
 		}
 		macos.ProcessWithConfig(cfg)
 	})
-
+	// Keep the daemon running
 	select {}
 }
 
@@ -39,19 +40,22 @@ func runDaemon() {
 func runCLI(args []string) {
 	switch args[0] {
 
+	// Show help message
 	case "help", "--help", "-h":
 		printHelp()
-
+	// Install as launchd agent
 	case "install":
+		// Get the path to the current executable
 		exe, err := os.Executable()
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Error:", err)
 			os.Exit(1)
 		}
+		// Resolve any symlinks to get the actual path
 		if resolved, err := filepath.EvalSymlinks(exe); err == nil {
 			exe = resolved
 		}
-
+		// Install launchd plist - autostart
 		if err := macos.InstallLaunchd(exe); err != nil {
 			fmt.Fprintln(os.Stderr, "Install failed:", err)
 			os.Exit(1)
@@ -60,7 +64,8 @@ func runCLI(args []string) {
 		fmt.Println("KeyFlip installed as launchd agent.")
 		fmt.Println("Grant Accessibility permissions:")
 		fmt.Println("System Settings → Privacy & Security → Accessibility → KeyFlip")
-
+	
+	// Uninstall launchd agent
 	case "uninstall":
 		if err := macos.UninstallLaunchd(); err != nil {
 			fmt.Fprintln(os.Stderr, "Uninstall failed:", err)
@@ -68,6 +73,7 @@ func runCLI(args []string) {
 		}
 		fmt.Println("KeyFlip uninstalled.")
 
+	// Configure KeyFlip settings
 	case "config":
 		handleConfig(args[1:])
 
@@ -77,6 +83,7 @@ func runCLI(args []string) {
 	}
 }
 
+// Handle 'config' CLI commands
 func handleConfig(args []string) {
 	if len(args) == 0 {
 		fmt.Println("Usage:")
@@ -86,6 +93,7 @@ func handleConfig(args []string) {
 	}
 
 	switch args[0] {
+	// Show current configuration
 	case "show":
 		cfg, err := macos.LoadConfig()
 		if err != nil {
@@ -96,19 +104,23 @@ func handleConfig(args []string) {
 		fmt.Printf("to:     %s\n", cfg.To)
 		fmt.Printf("hotkey: %s\n", cfg.Hotkey)
 
+	// set configuration values
 	case "set":
+		// Load existing config
 		cfg, err := macos.LoadConfig()
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-
+		// Parse key=value pairs from arguments for example:from=en to=ua hotkey=cmd+shift+k
 		for _, a := range args[1:] {
+			// Split into key and value "from=en" → ["from","en"]
 			kv := strings.SplitN(a, "=", 2)
 			if len(kv) != 2 {
 				fmt.Println("Invalid config:", a)
 				continue
 			}
+			// Update config fields based on key
 			switch kv[0] {
 			case "from":
 				cfg.From = kv[1]
@@ -120,7 +132,7 @@ func handleConfig(args []string) {
 				fmt.Println("Unknown key:", kv[0])
 			}
 		}
-
+		// Save updated config
 		if err := macos.SaveConfig(cfg); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
@@ -128,7 +140,7 @@ func handleConfig(args []string) {
 		fmt.Println("Config saved.")
 	}
 }
-
+// Print help message for CLI usage
 func printHelp() {
 	fmt.Println(`
 KeyFlip — keyboard layout fixer
