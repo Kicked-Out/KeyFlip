@@ -1,4 +1,5 @@
 * {
+    margin: 0;
     box-sizing: border-box;
     border-width: 0;
     border-style: solid;
@@ -20,9 +21,7 @@ header {
 }
 
 .container {
-    max-width: 81%;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 1280px;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     text-align: center;
@@ -33,13 +32,74 @@ section.container {
     padding-bottom: 6rem;
 }
 
+section.doc-section {
+    margin-bottom: 5rem;
+}
+
+.section-title {
+    margin-bottom: 2rem;
+    font-weight: 700;
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+}
+
+.section-text:first-of-type {
+    margin: 0;
+}
+
+ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.section-text {
+    margin-top: 1rem;
+    font-size: 1.125rem;
+    line-height: 1.625;
+    color: rgb(209 213 219);
+}
+
+.section-list {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: rgb(209 213 219);
+    list-style-type: decimal;
+    list-style-position: inside;
+}
+
+.section-list > li {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.link {
+    color: rgb(96 165 250);
+    text-decoration: inherit;
+}
+
+.link:hover {
+    text-decoration-line: underline;
+}
+
 nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-inline: auto;
     padding-inline: 24px;
-    padding-block: 20px;
+    padding-block: 10px;
+}
+
+main {
+    flex-grow: 1;
+    max-width: 64rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
 }
 
 .logo-text {
@@ -85,6 +145,13 @@ a.nav-item:hover {
     background-clip: text;
 }
 
+.doc-title {
+    text-align: center;
+    background-image: linear-gradient(to right, #60a5fa, #a855f7);
+    color: transparent;
+    background-clip: text;
+}
+
 h1 {
     font-size: 4.5rem !important;
     line-height: 1 !important;
@@ -115,6 +182,24 @@ a {
 
 li {
     list-style: none;
+}
+
+code,
+kbd,
+pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+    font-size: 1em;
+}
+
+strong {
+    font-weight: bolder;
+}
+
+dt {
+    display: block;
+    unicode-bidi: isolate;
 }
 
 .btn {
@@ -184,6 +269,31 @@ li {
     line-height: 2.25rem;
     border-radius: 0.5rem;
     background-color: rgb(17 24 39);
+}
+
+.code-line {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    background-color: rgb(31 41 55);
+    border-radius: 0.25rem;
+}
+
+.hotkeys {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    background-color: rgb(31 41 55);
+    border-radius: 0.25rem;
+}
+
+.example-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 2.5rem;
+    gap: 2.5rem;
 }
 
 .subblock__text {
@@ -268,6 +378,73 @@ footer {
 
 .footer-link:hover {
     color: rgb(96 165 250);
+}
+
+.example-block {
+    padding: 2rem;
+    background-color: rgb(31 41 55);
+    border-radius: 0.75rem;
+}
+
+.example-title {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+}
+
+.example-text {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+
+pre.formatted-text {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    background-color: rgb(31 41 55);
+    border-radius: 0.75rem;
+    overflow-x: auto;
+}
+
+.example-block--small:first-of-type(2) {
+    margin-top: 1rem;
+}
+
+.example-block--small {
+    margin-top: 1.5rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: rgb(209 213 219);
+}
+
+.example-text--small {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    background-color: rgb(31 41 55);
+    border-radius: 0.25rem;
+}
+
+.faq-block > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.faq-question {
+    font-weight: 600;
+    font-size: 1.27rem;
+    line-height: 1.75rem;
+}
+
+.faq-answer {
+    margin-top: 0.5rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: rgb(209 213 219);
 }
 
 .animate-bounce {
