@@ -1,15 +1,16 @@
 package macos
-
+// mechanism which decides that KeyFlip should run always
 import (
 	"fmt"
-	"html"
 	"os"
 	"os/exec"
 	"path/filepath"
 )
 
+// Label for the launchd agent
 const launchdLabel = "com.keyflip.daemon"
 
+// Returns the path to the launchd plist file (User home directory)
 func launchdPlistPath() (string, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -23,18 +24,18 @@ func launchdPlistPath() (string, error) {
 	), nil
 }
 
+// Installs the launchd plist to autostart the application
 func InstallLaunchd(binaryPath string) error {
+	// Get the path to the plist file
 	path, err := launchdPlistPath()
 	if err != nil {
 		return err
 	}
-
+	// Ensure the directory exists if not, create it
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		return err
 	}
-
-	escapedPath := html.EscapeString(binaryPath)
-
+	// Create the plist content
 	plist := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
 "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -48,14 +49,6 @@ func InstallLaunchd(binaryPath string) error {
 		<string>%s</string>
 	</array>
 
-	<key>EnvironmentVariables</key>
-	<dict>
-		<key>LANG</key>
-		<string>en_US.UTF-8</string>
-		<key>LC_ALL</key>
-		<string>en_US.UTF-8</string>
-	</dict>
-
 	<key>RunAtLoad</key>
 	<true/>
 
@@ -63,22 +56,23 @@ func InstallLaunchd(binaryPath string) error {
 	<true/>
 </dict>
 </plist>
-`, launchdLabel, escapedPath)
+`, launchdLabel, binaryPath)
 
+	// Write the plist file
 	if err := os.WriteFile(path, []byte(plist), 0o644); err != nil {
 		return err
 	}
 
-	// unload якщо був
+	// Load the plist with launchctl
 	_ = exec.Command("launchctl", "unload", path).Run()
 
-	// load
 	cmd := exec.Command("launchctl", "load", path)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
 }
 
+// Uninstalls the launchd plist and unloads the agent
 func UninstallLaunchd() error {
 	path, err := launchdPlistPath()
 	if err != nil {
@@ -89,6 +83,7 @@ func UninstallLaunchd() error {
 	return os.Remove(path)
 }
 
+// Checks if the launchd plist is installed
 func LaunchdInstalled() bool {
 	path, err := launchdPlistPath()
 	if err != nil {

@@ -1,5 +1,7 @@
 package macos
 
+// C mechanism to listen for global hotkey (Cmd+Shift+K)
+
 /*
 #cgo CFLAGS: -x objective-c
 #cgo LDFLAGS: -framework ApplicationServices -framework CoreFoundation
@@ -72,7 +74,7 @@ func OnHotkey() {
 		go (*h)()
 	}
 }
-
+// Starts the hotkey listener in a separate goroutine
 func StartHotkeyListener(handler func()) {
 	hotkeyHandler.Store(&handler)
 	go C.keyflip_startHotkeyListener()
