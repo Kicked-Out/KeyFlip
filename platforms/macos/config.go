@@ -3,6 +3,7 @@ package macos
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -40,7 +41,10 @@ func LoadConfig() (Config, error) {
 	if err != nil {
 		if os.IsNotExist(err) {
 			cfg := defaultConfig()
-			_ = SaveConfig(cfg)
+			if saveErr := SaveConfig(cfg); saveErr != nil {
+				// Log or return wrapped error
+				return cfg, fmt.Errorf("config not found, failed to create default: %w", saveErr)
+			}
 			return cfg, nil
 		}
 		return Config{}, err
