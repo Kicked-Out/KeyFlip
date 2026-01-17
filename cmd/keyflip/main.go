@@ -6,8 +6,10 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/Kicked-Out/KeyFlip/core"
 	macos "github.com/Kicked-Out/KeyFlip/platforms/macos"
 )
+
 // This file is entry point for KeyFlip application. Decides whether to run as daemon or CLI based on arguments.
 func main() {
 	// If there are any command-line arguments, run as CLI, if not, run as daemon
@@ -76,6 +78,9 @@ func runCLI(args []string) {
 	// Configure KeyFlip settings
 	case "config":
 		handleConfig(args[1:])
+	
+	case "lang":
+		showLanguages()
 
 	default:
 		fmt.Println("Unknown command:", args[0])
@@ -93,7 +98,7 @@ func handleConfig(args []string) {
 	}
 
 	switch args[0] {
-	// Show current configuration
+
 	case "show":
 		cfg, err := macos.LoadConfig()
 		if err != nil {
@@ -104,42 +109,70 @@ func handleConfig(args []string) {
 		fmt.Printf("to:     %s\n", cfg.To)
 		fmt.Printf("hotkey: %s\n", cfg.Hotkey)
 
-	// set configuration values
 	case "set":
-		// Load existing config
 		cfg, err := macos.LoadConfig()
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-		// Parse key=value pairs from arguments for example:from=en to=ua hotkey=cmd+shift+k
+
+		// load layouts.json
+		layoutsPath, err := macos.LayoutsPath()
+		if err != nil {
+			fmt.Println("Failed to find layouts.json:", err)
+			return
+		}
+
+		layouts, err := core.LoadLayouts(layoutsPath)
+		if err != nil {
+			fmt.Println("Failed to load layouts:", err)
+			return
+		}
+
+		isValidLang := func(lang string) bool {
+			_, ok := layouts[lang]
+			return ok
+		}
+
 		for _, a := range args[1:] {
-			// Split into key and value "from=en" → ["from","en"]
 			kv := strings.SplitN(a, "=", 2)
 			if len(kv) != 2 {
 				fmt.Println("Invalid config:", a)
 				continue
 			}
-			// Update config fields based on key
+
 			switch kv[0] {
 			case "from":
+				if !isValidLang(kv[1]) {
+					fmt.Println("Unknown language:", kv[1])
+					return
+				}
 				cfg.From = kv[1]
+
 			case "to":
+				if !isValidLang(kv[1]) {
+					fmt.Println("Unknown language:", kv[1])
+					return
+				}
 				cfg.To = kv[1]
+
 			case "hotkey":
 				cfg.Hotkey = kv[1]
+
 			default:
 				fmt.Println("Unknown key:", kv[0])
 			}
 		}
-		// Save updated config
+
 		if err := macos.SaveConfig(cfg); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
+
 		fmt.Println("Config saved.")
 	}
 }
+
 // Print help message for CLI usage
 func printHelp() {
 	fmt.Println(`
@@ -151,4 +184,23 @@ USAGE:
   keyflip uninstall    Remove autostart
   keyflip config       Configure behavior
 `)
+}
+
+func showLanguages() {
+	path, err := macos.LayoutsPath()
+	if err != nil {
+		fmt.Println("Failed to locate layouts.json:", err)
+		return
+	}
+
+	layouts, err := core.LoadLayouts(path)
+	if err != nil {
+		fmt.Println("Failed to load layouts:", err)
+		return
+	}
+
+	fmt.Println("Available languages:")
+	for lang := range layouts {
+		fmt.Println(" -", lang)
+	}
 }
