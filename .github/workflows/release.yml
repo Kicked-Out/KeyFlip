@@ -19,4 +19,6 @@ jobs:
 
       - name: Build macOS binary
         run: |
-          go build -o keyflip ./cmd/keyflip
+          mkdir -p dist
+          go build -o dist/keyflip ./cmd/keyflip
+          cp layouts.json dist/layouts.json

@@ -46,27 +46,42 @@ func runCLI(args []string) {
 	case "help", "--help", "-h":
 		printHelp()
 	// Install as launchd agent
-	case "install":
-		// Get the path to the current executable
-		exe, err := os.Executable()
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "Error:", err)
+	case "restart":
+		if err := macos.UninstallLaunchd(); err != nil {
+			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-		// Resolve any symlinks to get the actual path
+		exe, _ := os.Executable()
+		_ = macos.InstallLaunchd(exe)
+		fmt.Println("KeyFlip restarted.")
+
+	case "install":
+		exe, err := os.Executable()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
 		if resolved, err := filepath.EvalSymlinks(exe); err == nil {
 			exe = resolved
 		}
-		// Install launchd plist - autostart
+
+		already := macos.LaunchdInstalled()
+
 		if err := macos.InstallLaunchd(exe); err != nil {
 			fmt.Fprintln(os.Stderr, "Install failed:", err)
 			os.Exit(1)
 		}
 
-		fmt.Println("KeyFlip installed as launchd agent.")
-		fmt.Println("Grant Accessibility permissions:")
-		fmt.Println("System Settings → Privacy & Security → Accessibility → KeyFlip")
-	
+		if already {
+			fmt.Println("KeyFlip restarted.")
+		} else {
+			fmt.Println("KeyFlip installed.")
+			fmt.Println("Grant Accessibility permissions:")
+			fmt.Println("System Settings → Privacy & Security → Accessibility → KeyFlip")
+			fmt.Println("After granting permissions, run:")
+			fmt.Println("  keyflip restart")
+		}
+
 	// Uninstall launchd agent
 	case "uninstall":
 		if err := macos.UninstallLaunchd(); err != nil {
@@ -93,7 +108,7 @@ func handleConfig(args []string) {
 	if len(args) == 0 {
 		fmt.Println("Usage:")
 		fmt.Println("  keyflip config show")
-		fmt.Println("  keyflip config set from=en to=ua")
+		fmt.Println("  keyflip config set from=xx to=yy")
 		return
 	}
 
@@ -116,17 +131,16 @@ func handleConfig(args []string) {
 			os.Exit(1)
 		}
 
-		// load layouts.json
 		layoutsPath, err := macos.LayoutsPath()
 		if err != nil {
-			fmt.Println("Failed to find layouts.json:", err)
-			return
+			fmt.Fprintln(os.Stderr, "Failed to find layouts.json:", err)
+			os.Exit(1)
 		}
 
 		layouts, err := core.LoadLayouts(layoutsPath)
 		if err != nil {
-			fmt.Println("Failed to load layouts:", err)
-			return
+			fmt.Fprintln(os.Stderr, "Failed to load layouts:", err)
+			os.Exit(1)
 		}
 
 		isValidLang := func(lang string) bool {
@@ -134,25 +148,30 @@ func handleConfig(args []string) {
 			return ok
 		}
 
+		hasError := false
+
 		for _, a := range args[1:] {
 			kv := strings.SplitN(a, "=", 2)
 			if len(kv) != 2 {
-				fmt.Println("Invalid config:", a)
+				fmt.Fprintln(os.Stderr, "Invalid config:", a)
+				hasError = true
 				continue
 			}
 
 			switch kv[0] {
 			case "from":
 				if !isValidLang(kv[1]) {
-					fmt.Println("Unknown language:", kv[1])
-					return
+					fmt.Fprintln(os.Stderr, "Unknown language:", kv[1])
+					hasError = true
+					continue
 				}
 				cfg.From = kv[1]
 
 			case "to":
 				if !isValidLang(kv[1]) {
-					fmt.Println("Unknown language:", kv[1])
-					return
+					fmt.Fprintln(os.Stderr, "Unknown language:", kv[1])
+					hasError = true
+					continue
 				}
 				cfg.To = kv[1]
 
@@ -160,8 +179,13 @@ func handleConfig(args []string) {
 				cfg.Hotkey = kv[1]
 
 			default:
-				fmt.Println("Unknown key:", kv[0])
+				fmt.Fprintln(os.Stderr, "Unknown key:", kv[0])
+				hasError = true
 			}
+		}
+
+		if hasError {
+			os.Exit(1)
 		}
 
 		if err := macos.SaveConfig(cfg); err != nil {
