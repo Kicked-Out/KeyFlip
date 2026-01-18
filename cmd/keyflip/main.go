@@ -51,8 +51,18 @@ func runCLI(args []string) {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-		exe, _ := os.Executable()
-		_ = macos.InstallLaunchd(exe)
+
+		exe, err := os.Executable()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+
+		if err := macos.InstallLaunchd(exe); err != nil {
+			fmt.Fprintln(os.Stderr, "Restart failed:", err)
+			os.Exit(1)
+		}
+
 		fmt.Println("KeyFlip restarted.")
 
 	case "install":
