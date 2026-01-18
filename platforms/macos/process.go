@@ -83,16 +83,27 @@ func detectDirection(
 	reverse map[rune]rune,
 ) map[rune]rune {
 
+	forwardScore := 0
+	reverseScore := 0
+
 	for _, r := range text {
-		if _, ok := forward[r]; ok {
-			return forward
+		_, inF := forward[r]
+		_, inR := reverse[r]
+
+		switch {
+		case inF && !inR:
+			forwardScore++
+		case inR && !inF:
+			reverseScore++
 		}
-		if _, ok := reverse[r]; ok {
-			return reverse
-		}
+	}
+
+	if reverseScore > forwardScore {
+		return reverse
 	}
 	return forward
 }
+
 
 
 
