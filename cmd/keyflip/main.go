@@ -58,6 +58,10 @@ func runCLI(args []string) {
 			os.Exit(1)
 		}
 
+		if resolved, err := filepath.EvalSymlinks(exe); err == nil {
+			exe = resolved
+		}
+
 		if err := macos.InstallLaunchd(exe); err != nil {
 			fmt.Fprintln(os.Stderr, "Restart failed:", err)
 			os.Exit(1)
@@ -213,10 +217,13 @@ func printHelp() {
 KeyFlip — keyboard layout fixer
 
 USAGE:
-  keyflip              Run daemon
-  keyflip install      Install autostart
-  keyflip uninstall    Remove autostart
-  keyflip config       Configure behavior
+  ./keyflip              Run daemon
+  ./keyflip install      Install autostart
+  ./keyflip uninstall    Remove autostart
+  ./keyflip config       Configure behavior
+  ./keyflip lang         Show available languages
+  ./keyflip help         Show this message
+
 `)
 }
 
