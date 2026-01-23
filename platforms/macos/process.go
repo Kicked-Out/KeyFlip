@@ -1,4 +1,7 @@
+//go:build darwin
+
 package macos
+
 // Main logic for processing clipboard text based on keyboard layout conversion
 import (
 	"bytes"
@@ -7,6 +10,7 @@ import (
 
 	"github.com/Kicked-Out/KeyFlip/core"
 )
+
 // Mutex to prevent concurrent processing - only one process at a time
 var (
 	processing sync.Mutex

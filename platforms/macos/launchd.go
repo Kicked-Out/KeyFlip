@@ -1,4 +1,7 @@
+//go:build darwin
+
 package macos
+
 // mechanism which decides that KeyFlip should run always
 import (
 	"fmt"

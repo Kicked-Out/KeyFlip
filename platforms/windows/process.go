@@ -1,94 +1,129 @@
+//go:build windows
+
 package windows
 
-// Main logic for processing clipboard text based on keyboard layout conversion
 import (
 	"bytes"
+	"fmt"
 	"sync"
 	"time"
 
 	"github.com/Kicked-Out/KeyFlip/core"
 )
 
-// Mutex to prevent concurrent processing - only one process at a time
 var (
 	processing sync.Mutex
 )
 
-//processes clipboard text based on provided configuration
 func ProcessWithConfig(cfg Config) {
-	// Try to acquire lock, if already processing, return immediately
 	if !processing.TryLock() {
-		return
-	}
-	// Release the lock when function exits
-	defer processing.Unlock()
-
-	// Determine mapping based on config
-	var mapping map[rune]rune
-
-	switch {
-	case cfg.From == "en" && cfg.To == "ua":
-		mapping = core.EnToUa
-	case cfg.From == "ua" && cfg.To == "en":
-		mapping = core.UaToEn
-	default:
+		fmt.Println("Already processing, skipping...")
 		return
 	}
 
-	// Read original clipboard content, If clipboard is empty, nothing to process
-	original, _ := ReadClipboard()
+	defer func() {
+		processing.Unlock()
+		fmt.Println("Processing finished, mutex unlocked.")
+	}()
 
-	time.Sleep(50 * time.Millisecond)
-	// Simulate Cmd+C(Ctrl+C)
+	layoutsPath, err := LayoutsPath()
+
+	if err != nil {
+		return
+	}
+
+	layouts, err := core.LoadLayouts(layoutsPath)
+
+	if err != nil {
+		return
+	}
+
+	fromLayout, ok1 := layouts[cfg.From]
+	toLayout, ok2 := layouts[cfg.To]
+
+	if !ok1 || !ok2 {
+		return
+	}
+
+	forward := make(map[rune]rune)
+	reverse := make(map[rune]rune)
+
+	for key, fromChar := range fromLayout {
+		toChar, ok := toLayout[key]
+
+		if !ok {
+			continue
+		}
+
+		forward[fromChar] = toChar
+		reverse[toChar] = fromChar
+	}
+
+	if len(forward) == 0 {
+		return
+	}
+
+	original, err := ReadClipboard()
+
+	if err != nil {
+		return
+	}
+
+	time.Sleep(500 * time.Millisecond)
 	CtrlC()
 
-	// Wait for clipboard to change with a timeout
-	text, ok := waitForClipboardChange(original, 300*time.Millisecond)
-	if !ok {
+	fmt.Println("Waiting for clipboard...")
+
+	text, ok := waitForClipboardChange(original, 500*time.Millisecond)
+
+	if !ok || text == original {
+		fmt.Println("Clipboard change timeout or failed.")
 		return
 	}
 
-	// Additional check: if text is same as original, nothing to process - potentially useless
-	if bytes.Equal([]byte(text), []byte(original)) {
-		return
-	}
-
-	//  Transform the text using the determined mapping
+	mapping := detectDirection(text, forward, reverse)
 	out := core.Transform(text, mapping)
 
-	// Write transformed text back to clipboard and restore original on failure
 	if err := WriteClipboard(out); err != nil {
 		_ = WriteClipboard(original)
+
 		return
 	}
 
 	time.Sleep(80 * time.Millisecond)
-	// Simulate Cmd+V(Ctrl+V)
 	CtrlV()
 
 	time.Sleep(50 * time.Millisecond)
-	// Waits and restore original clipboard content
 	_ = WriteClipboard(original)
 }
 
-// detectMapping analyzes the text to determine if it's in English or Ukrainian layout (but it's not used now - maybe delete it later)
-func detectMapping(text string) map[rune]rune {
+func detectDirection(
+	text string,
+	forward map[rune]rune,
+	reverse map[rune]rune,
+)map[rune]rune {
+	forwardScore := 0
+	reverseScore := 0
+
 	for _, r := range text {
+		_, inF := forward[r]
+		_, inR := reverse[r]
 
-		
-		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
-			return core.EnToUa
-		}
-
-		
-		if (r >= 'а' && r <= 'я') || (r >= 'А' && r <= 'Я') || r == 'і' || r == 'І' {
-			return core.UaToEn
+		switch {
+		case inF && !inR:
+			forwardScore++
+		case inR && !inF:
+			reverseScore++
 		}
 	}
-	return nil
+
+	if reverseScore > forwardScore {
+		return reverse
+	}
+
+	return forward
 }
 
-//waits for clipboard content to change from the original within the specified timeout duration
 func waitForClipboardChange(original string, timeout time.Duration) (string, bool) {
 	deadline := time.Now().Add(timeout)
 

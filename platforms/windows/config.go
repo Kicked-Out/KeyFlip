@@ -1,3 +1,5 @@
+//go:build windows
+
 package windows
 
 import (
@@ -9,7 +11,7 @@ import (
 type Config struct {
 	From string `json:"from"`
 	To string `json:"to"`
-	Hotkey string `json:"hokey"`
+	Hotkey string `json:"hotkey"`
 }
 
 func defaultConfig() Config {
@@ -23,7 +25,7 @@ func defaultConfig() Config {
 func configPath() (string, error) {
 	dir := os.Getenv("APPDATA")
 
-	return filepath.Join(dir, "Keyflip", "config.json"), nil
+	return filepath.Join(dir, "KeyFlip", "config.json"), nil
 }
 
 func LoadConfig() (Config, error) {
