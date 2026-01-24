@@ -1,53 +1,60 @@
-//go:build darwin
+//go:build windows
 
-package macos
+package windows
 
-// Main logic for processing clipboard text based on keyboard layout conversion
 import (
 	"bytes"
+	"fmt"
 	"sync"
 	"time"
 
 	"github.com/Kicked-Out/KeyFlip/core"
 )
 
-// Mutex to prevent concurrent processing - only one process at a time
 var (
 	processing sync.Mutex
 )
 
-//processes clipboard text based on provided configuration
 func ProcessWithConfig(cfg Config) {
 	if !processing.TryLock() {
+		fmt.Println("Already processing, skipping...")
 		return
 	}
-	defer processing.Unlock()
+
+	defer func() {
+		processing.Unlock()
+		fmt.Println("Processing finished, mutex unlocked.")
+	}()
 
 	layoutsPath, err := LayoutsPath()
+
 	if err != nil {
 		return
 	}
 
 	layouts, err := core.LoadLayouts(layoutsPath)
+
 	if err != nil {
 		return
 	}
 
 	fromLayout, ok1 := layouts[cfg.From]
 	toLayout, ok2 := layouts[cfg.To]
+
 	if !ok1 || !ok2 {
 		return
 	}
 
-	// build forward and reverse mappings
-	forward := make(map[rune]rune) // from -> to
-	reverse := make(map[rune]rune) // to -> from
+	forward := make(map[rune]rune)
+	reverse := make(map[rune]rune)
 
 	for key, fromChar := range fromLayout {
 		toChar, ok := toLayout[key]
+
 		if !ok {
 			continue
 		}
+
 		forward[fromChar] = toChar
 		reverse[toChar] = fromChar
 	}
@@ -56,13 +63,21 @@ func ProcessWithConfig(cfg Config) {
 		return
 	}
 
-	original, _ := ReadClipboard()
+	original, err := ReadClipboard()
 
-	time.Sleep(50 * time.Millisecond)
-	CmdC()
+	if err != nil {
+		return
+	}
 
-	text, ok := waitForClipboardChange(original, 300*time.Millisecond)
+	time.Sleep(500 * time.Millisecond)
+	CtrlC()
+
+	fmt.Println("Waiting for clipboard...")
+
+	text, ok := waitForClipboardChange(original, 500*time.Millisecond)
+
 	if !ok || text == original {
+		fmt.Println("Clipboard change timeout or failed.")
 		return
 	}
 
@@ -71,11 +86,12 @@ func ProcessWithConfig(cfg Config) {
 
 	if err := WriteClipboard(out); err != nil {
 		_ = WriteClipboard(original)
+
 		return
 	}
 
 	time.Sleep(80 * time.Millisecond)
-	CmdV()
+	CtrlV()
 
 	time.Sleep(50 * time.Millisecond)
 	_ = WriteClipboard(original)
@@ -85,8 +101,7 @@ func detectDirection(
 	text string,
 	forward map[rune]rune,
 	reverse map[rune]rune,
-) map[rune]rune {
-
+)map[rune]rune {
 	forwardScore := 0
 	reverseScore := 0
 
@@ -105,16 +120,10 @@ func detectDirection(
 	if reverseScore > forwardScore {
 		return reverse
 	}
+
 	return forward
 }
 
-
-
-
-
-
-
-//waits for clipboard content to change from the original within the specified timeout duration
 func waitForClipboardChange(original string, timeout time.Duration) (string, bool) {
 	deadline := time.Now().Add(timeout)
 

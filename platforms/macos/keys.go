@@ -1,3 +1,5 @@
+//go:build darwin
+
 package macos
 
 // C mechanism to simulate Cmd+C and Cmd+V key presses

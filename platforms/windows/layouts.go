@@ -1,6 +1,6 @@
-//go:build darwin
+//go:build windows
 
-package macos
+package windows
 
 import (
 	"os"
@@ -9,8 +9,10 @@ import (
 
 func LayoutsPath() (string, error) {
 	exe, err := os.Executable()
+
 	if err != nil {
 		return "", err
 	}
+
 	return filepath.Join(filepath.Dir(exe), "layouts.json"), nil
 }

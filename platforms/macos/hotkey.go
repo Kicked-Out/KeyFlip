@@ -1,3 +1,5 @@
+//go:build darwin
+
 package macos
 
 // C mechanism to listen for global hotkey (Cmd+Shift+K)
