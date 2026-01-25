@@ -28,9 +28,9 @@ jobs:
           zip -r keyflip-macos-${GITHUB_REF_NAME}.zip keyflip-macos
 
       - name: Upload macOS Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          files: dist/keyflip-macos-${GITHUB_REF_NAME}.zip
+          files: dist/keyflip-macos-${{ github.ref_name }}.zip
 
   build-windows:
     runs-on: windows-latest
@@ -55,6 +55,6 @@ jobs:
           Compress-Archive -Path dist/keyflip-windows -DestinationPath dist/keyflip-windows-$env:GITHUB_REF_NAME.zip
 
       - name: Upload Windows Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          files: dist/keyflip-windows-$env:GITHUB_REF_NAME.zip
+          files: dist/keyflip-windows-${{ github.ref_name }}.zip
