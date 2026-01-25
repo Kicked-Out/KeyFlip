@@ -48,7 +48,7 @@ func runCLI(args []string) {
 	// Show help message
 	case "help", "--help", "-h":
 		printHelp()
-	// Install as launchd agent
+	// Restart launchd agent
 	case "restart":
 		if err := macos.UninstallLaunchd(); err != nil {
 			fmt.Fprintln(os.Stderr, err)
@@ -71,7 +71,7 @@ func runCLI(args []string) {
 		}
 
 		fmt.Println("KeyFlip restarted.")
-
+	// Install as launchd agent
 	case "install":
 		exe, err := os.Executable()
 		if err != nil {
@@ -110,7 +110,7 @@ func runCLI(args []string) {
 	// Configure KeyFlip settings
 	case "config":
 		handleConfig(args[1:])
-	
+	// Show available languages
 	case "lang":
 		showLanguages()
 
@@ -192,9 +192,7 @@ func handleConfig(args []string) {
 				}
 				cfg.To = kv[1]
 
-			case "hotkey":
-				cfg.Hotkey = kv[1]
-
+			
 			default:
 				fmt.Fprintln(os.Stderr, "Unknown key:", kv[0])
 				hasError = true
