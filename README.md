@@ -95,7 +95,19 @@ keyflip.exe help
 
 ---
 
-## 🖥 CLI Commands
+## 🖥 CLI Commands (macOS)
+
+| Command                              | Description                     |
+| ----------------------------------   | ------------------------------- |
+| `./keyflip`                          | Run background daemon           |
+| `./keyflip install`                  | Enable autostart                |
+| `./keyflip uninstall`                | Disable autostart               |
+| `./keyflip restart`                  | Restart background process      |
+| `./keyflip config show`              | Show current configuration      |
+| `./keyflip config set from=xx to=yy` | Set default conversion layouts  |
+| `./keyflip lang`                     | List available keyboard layouts |
+
+## 🖥 CLI Commands (Windows)
 
 | Command                            | Description                     |
 | ---------------------------------- | ------------------------------- |
@@ -135,60 +147,22 @@ KeyFlip uses a JSON-based layout mapping system.
 {
     "layouts": {
         "en": {
-            "q": "q",
-            "w": "w",
-            "e": "e",
-            "r": "r",
-            "t": "t",
-            "y": "y",
-            "u": "u",
-            "i": "i",
-            "o": "o",
-            "p": "p",
-            "a": "a",
-            "s": "s",
-            "d": "d",
-            "f": "f",
-            "g": "g",
-            "h": "h",
-            "j": "j",
-            "k": "k",
-            "l": "l",
-            "z": "z",
-            "x": "x",
-            "c": "c",
-            "v": "v",
-            "b": "b",
-            "n": "n",
-            "m": "m"
+            "q": "q", "w": "w", "e": "e", "r": "r",
+            "t": "t", "y": "y", "u": "u", "i": "i",
+            "o": "o", "p": "p", "a": "a", "s": "s",
+            "d": "d", "f": "f", "g": "g", "h": "h",
+            "j": "j", "k": "k", "l": "l", "z": "z",
+            "x": "x", "c": "c", "v": "v", "b": "b",
+            "n": "n", "m": "m"
         },
         "ua": {
-            "q": "й",
-            "w": "ц",
-            "e": "у",
-            "r": "к",
-            "t": "е",
-            "y": "н",
-            "u": "г",
-            "i": "ш",
-            "o": "щ",
-            "p": "з",
-            "a": "ф",
-            "s": "і",
-            "d": "в",
-            "f": "а",
-            "g": "п",
-            "h": "р",
-            "j": "о",
-            "k": "л",
-            "l": "д",
-            "z": "я",
-            "x": "ч",
-            "c": "с",
-            "v": "м",
-            "b": "и",
-            "n": "т",
-            "m": "ь"
+            "q": "й", "w": "ц", "e": "у", "r": "к",
+            "t": "е", "y": "н", "u": "г", "i": "ш",
+            "o": "щ", "p": "з", "a": "ф", "s": "і",
+            "d": "в", "f": "а", "g": "п", "h": "р",
+            "j": "о", "k": "л", "l": "д", "z": "я",
+            "x": "ч", "c": "с", "v": "м", "b": "и",
+            "n": "т", "m": "ь"
         }
     }
 }
