@@ -1,8 +1,6 @@
-
-```markdown
 # KeyFlip — Keyboard Layout Fixer for macOS
 
-KeyFlip automatically converts text in your clipboard between different keyboard layouts.  
+KeyFlip automatically converts text in your clipboard between different keyboard layouts.
 Especially useful when you accidentally type text in the wrong layout.
 
 ---
@@ -10,6 +8,7 @@ Especially useful when you accidentally type text in the wrong layout.
 ## 📥 Download & Installation
 
 ### 1. Clone the repository
+
 ```bash
 git clone https://github.com/YourUsername/KeyFlip.git
 cd KeyFlip
@@ -125,5 +124,3 @@ git checkout -b feature/my-new-layout
 ## 🏷 License
 
 This project is open-source. See `LICENSE` for details.
-
-
