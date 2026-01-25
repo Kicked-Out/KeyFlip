@@ -197,9 +197,6 @@ func handleConfig(args []string) {
 
 				cfg.To = kv[1]
 
-			case "hotkey":
-				cfg.Hotkey = kv[1]
-
 			default:
 				fmt.Fprintln(os.Stderr, "Unknown key:", kv[0])
 				hasError = true
@@ -224,13 +221,13 @@ func printHelp() {
 KeyFlip — keyboard layout fixer (Windows)
 
 USAGE:
-	keyflip				Run daemon
-	keyflip install		Install autostart
-	keyflip uninstall	Remove autostart
-	keyflip restart		Reinstall autostart
-	keyflip config		Configure behavior
-	keyflip lang		Show available languages
-	keyflip help		Show this message`)
+	keyflip					Run daemon
+	keyflip install			Install autostart
+	keyflip uninstall		Remove autostart
+	keyflip restart			Reinstall autostart
+	keyflip config			Configure behavior
+	keyflip lang			Show available languages
+	keyflip help			Show this message`)
 }
 
 func showLanguages() {

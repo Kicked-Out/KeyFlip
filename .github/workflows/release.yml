@@ -1,24 +1,42 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - main
+    push:
+        branches:
+            - main
 
 jobs:
-  build-macos:
-    runs-on: macos-latest
+    build-macos:
+        runs-on: macos-latest
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.22'
+            - name: Set up Go
+              uses: actions/setup-go@v5
+              with:
+                  go-version: "1.22"
 
-      - name: Build macOS binary
-        run: |
-          mkdir -p dist
-          go build -o dist/keyflip ./cmd/keyflip
-          cp layouts.json dist/layouts.json
+            - name: Build macOS binary
+              run: |
+                  mkdir -p dist
+                  go build -o dist/keyflip ./cmd/keyflip
+                  cp layouts.json dist/layouts.json
+
+    build-windows:
+        runs-on: windows-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Set up Go
+              uses: actions/setup-go@v5
+              with:
+                  go-version: "1.22"
+
+            - name: Build Windows binary
+              shell: pwsh
+              run: |
+                  New-Item -ItemType Directory -Force dist
+                  go build -o dist/keyflip.exe ./cmd/keyflip
+                  Copy-Item layouts.json dist/layouts.json
