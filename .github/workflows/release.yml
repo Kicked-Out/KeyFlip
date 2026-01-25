@@ -1,54 +1,60 @@
 name: Release
 
 on:
-    push:
-        branches:
-            - main
+  push:
+    tags:
+      - "v*"
 
 jobs:
-    build-macos:
-        runs-on: macos-latest
+  build-macos:
+    runs-on: macos-latest
 
-        steps:
-            - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Set up Go
-              uses: actions/setup-go@v5
-              with:
-                  go-version: "1.22"
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
 
-            - name: Build macOS binary
-              run: |
-                  mkdir -p dist
-                  go build -o dist/keyflip ./cmd/keyflip
-                  cp layouts.json dist/layouts.json
+      - name: Build macOS
+        run: |
+          mkdir -p dist/keyflip-macos
+          go build -o dist/keyflip-macos/keyflip ./cmd/keyflip
+          cp layouts.json dist/keyflip-macos/
 
-            - name: Upload macOS artifact
-              uses: actions/upload-artifact@v4
-              with:
-                  name: keyflip-macos
-                  path: dist/
+      - name: Zip macOS
+        run: |
+          cd dist
+          zip -r keyflip-macos-${GITHUB_REF_NAME}.zip keyflip-macos
 
-    build-windows:
-        runs-on: windows-latest
+      - name: Upload macOS Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/keyflip-macos-${GITHUB_REF_NAME}.zip
 
-        steps:
-            - uses: actions/checkout@v4
+  build-windows:
+    runs-on: windows-latest
 
-            - name: Set up Go
-              uses: actions/setup-go@v5
-              with:
-                  go-version: "1.22"
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Build Windows binary
-              shell: pwsh
-              run: |
-                  New-Item -ItemType Directory -Force dist
-                  go build -o dist/keyflip.exe ./cmd/keyflip
-                  Copy-Item layouts.json dist/layouts.json
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
 
-            - name: Upload Windows artifact
-              uses: actions/upload-artifact@v4
-              with:
-                  name: keyflip-windows
-                  path: dist/
+      - name: Build Windows
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist/keyflip-windows
+          go build -o dist/keyflip-windows/keyflip.exe ./cmd/keyflip
+          Copy-Item layouts.json dist/keyflip-windows/layouts.json
+
+      - name: Zip Windows
+        shell: pwsh
+        run: |
+          Compress-Archive -Path dist/keyflip-windows -DestinationPath dist/keyflip-windows-$env:GITHUB_REF_NAME.zip
+
+      - name: Upload Windows Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/keyflip-windows-$env:GITHUB_REF_NAME.zip
