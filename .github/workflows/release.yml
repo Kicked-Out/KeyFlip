@@ -23,6 +23,12 @@ jobs:
                   go build -o dist/keyflip ./cmd/keyflip
                   cp layouts.json dist/layouts.json
 
+            - name: Upload macOS artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: keyflip-macos
+                  path: dist/
+
     build-windows:
         runs-on: windows-latest
 
@@ -40,3 +46,9 @@ jobs:
                   New-Item -ItemType Directory -Force dist
                   go build -o dist/keyflip.exe ./cmd/keyflip
                   Copy-Item layouts.json dist/layouts.json
+
+            - name: Upload Windows artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: keyflip-windows
+                  path: dist/
