@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 )
 
+// Returns the path to the layouts file
 func LayoutsPath() (string, error) {
 	exe, err := os.Executable()
 	if err != nil {

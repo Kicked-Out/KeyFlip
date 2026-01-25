@@ -42,7 +42,7 @@ func LoadConfig() (Config, error) {
 	if err != nil {
 		return Config{}, err
 	}
-
+	// Read file
 	b, err := os.ReadFile(path)
 	if err != nil {
 		if os.IsNotExist(err) {

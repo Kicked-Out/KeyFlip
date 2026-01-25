@@ -18,21 +18,22 @@ var (
 
 //processes clipboard text based on provided configuration
 func ProcessWithConfig(cfg Config) {
+	// blocks if another processing is ongoing
 	if !processing.TryLock() {
 		return
 	}
 	defer processing.Unlock()
-
+	// Load layouts
 	layoutsPath, err := LayoutsPath()
 	if err != nil {
 		return
 	}
-
+	// Load layouts from file
 	layouts, err := core.LoadLayouts(layoutsPath)
 	if err != nil {
 		return
 	}
-
+	// Get from and to layouts
 	fromLayout, ok1 := layouts[cfg.From]
 	toLayout, ok2 := layouts[cfg.To]
 	if !ok1 || !ok2 {
@@ -43,6 +44,7 @@ func ProcessWithConfig(cfg Config) {
 	forward := make(map[rune]rune) // from -> to
 	reverse := make(map[rune]rune) // to -> from
 
+	// Create bidirectional mapping between fromLayout and toLayout
 	for key, fromChar := range fromLayout {
 		toChar, ok := toLayout[key]
 		if !ok {
@@ -56,19 +58,23 @@ func ProcessWithConfig(cfg Config) {
 		return
 	}
 
+	// Read original clipboard content
 	original, _ := ReadClipboard()
 
 	time.Sleep(50 * time.Millisecond)
 	CmdC()
 
+	// Wait for clipboard to change
 	text, ok := waitForClipboardChange(original, 300*time.Millisecond)
 	if !ok || text == original {
 		return
 	}
 
+	// Detect direction and transform text
 	mapping := detectDirection(text, forward, reverse)
 	out := core.Transform(text, mapping)
 
+	// Write transformed text to clipboard
 	if err := WriteClipboard(out); err != nil {
 		_ = WriteClipboard(original)
 		return
@@ -81,6 +87,7 @@ func ProcessWithConfig(cfg Config) {
 	_ = WriteClipboard(original)
 }
 
+//detects the most likely direction of text transformation based on character presence in layouts
 func detectDirection(
 	text string,
 	forward map[rune]rune,
@@ -107,11 +114,6 @@ func detectDirection(
 	}
 	return forward
 }
-
-
-
-
-
 
 
 //waits for clipboard content to change from the original within the specified timeout duration
