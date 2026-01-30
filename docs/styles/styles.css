@@ -20,13 +20,6 @@ header {
     background-color: rgba(32, 39, 49, 0.5);
 }
 
-.container {
-    max-width: 1280px;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    text-align: center;
-}
-
 section.container {
     padding-top: 6rem;
     padding-bottom: 6rem;
@@ -36,50 +29,10 @@ section.doc-section {
     margin-bottom: 5rem;
 }
 
-.section-title {
-    margin-bottom: 2rem;
-    font-weight: 700;
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-}
-
-.section-text:first-of-type {
-    margin: 0;
-}
-
 ol {
     list-style: none;
     margin: 0;
     padding: 0;
-}
-
-.section-text {
-    margin-top: 1rem;
-    font-size: 1.125rem;
-    line-height: 1.625;
-    color: rgb(209 213 219);
-}
-
-.section-list {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-    color: rgb(209 213 219);
-    list-style-type: decimal;
-    list-style-position: inside;
-}
-
-.section-list > li {
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.link {
-    color: rgb(96 165 250);
-    text-decoration: inherit;
-}
-
-.link:hover {
-    text-decoration-line: underline;
 }
 
 nav {
@@ -102,6 +55,154 @@ main {
     padding-right: 1.5rem;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    min-height: 100vh;
+    background-color: rgb(17, 24, 39);
+    color: rgb(243, 244, 246);
+}
+
+h1 {
+    font-size: 4.5rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 2rem !important;
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+li {
+    list-style-type: disc;
+}
+
+code,
+kbd,
+pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+    font-size: 1em;
+}
+
+strong {
+    font-weight: bolder;
+}
+
+dt {
+    display: block;
+    unicode-bidi: isolate;
+}
+
+footer {
+    background-color: rgb(31 41 55 / 0.5);
+    backdrop-filter: blur(12px);
+    color: rgb(156 163 175);
+    text-align: center;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead > tr {
+    background-color: rgb(37, 49, 66) !important;
+}
+
+tr {
+    border-bottom: 1px solid;
+}
+
+tr:nth-child(even) {
+    background-color: rgb(31 41 55);
+    border-color: rgb(55 65 81);
+}
+
+tr:nth-child(odd) {
+    background-color: rgb(27, 36, 49);
+    border-color: rgb(61, 71, 87);
+}
+
+tr:hover {
+    filter: brightness(1.1);
+}
+
+th,
+td {
+    padding: 1rem;
+}
+
+blockquote.section-quote {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+    border-left: 4px solid rgb(55 65 81);
+    color: rgb(55 65 81);
+    font-style: italic;
+}
+
+ul.nav-list > li {
+    list-style-type: none;
+}
+
+.container {
+    max-width: 1280px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    text-align: center;
+}
+
+.section-title {
+    margin-bottom: 2rem;
+    font-weight: 700;
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+}
+
+.section-text:first-of-type {
+    margin: 0;
+}
+
+.section-text {
+    margin-top: 1rem;
+    font-size: 1.125rem;
+    line-height: 1.625;
+    color: rgb(209 213 219);
+}
+
+.section-list {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: rgb(209 213 219);
+    list-style-type: decimal;
+    list-style-position: inside;
+}
+
+.section-list > li {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.section-separator {
+    border-top: 1px solid;
+    border-color: rgb(30, 41, 65) !important;
+}
+
+.link {
+    color: rgb(96 165 250);
+    text-decoration: inherit;
+}
+
+.link:hover {
+    text-decoration-line: underline;
+}
+
 .logo-text {
     font-size: 1.875rem;
     font-weight: 700;
@@ -115,15 +216,6 @@ main {
     display: flex;
     gap: 3rem;
     font-size: 1.125rem;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    min-height: 100vh;
-    background-color: rgb(17, 24, 39);
-    color: rgb(243, 244, 246);
 }
 
 a.nav-item {
@@ -152,12 +244,6 @@ a.nav-item:hover {
     background-clip: text;
 }
 
-h1 {
-    font-size: 4.5rem !important;
-    font-weight: 800 !important;
-    margin-bottom: 2rem !important;
-}
-
 .subtitle {
     max-width: 56rem;
     margin-left: auto;
@@ -172,33 +258,6 @@ h1 {
     display: flex;
     gap: 1.5rem;
     justify-content: center;
-}
-
-a {
-    color: inherit;
-    text-decoration: inherit;
-}
-
-li {
-    list-style: none;
-}
-
-code,
-kbd,
-pre {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    font-feature-settings: normal;
-    font-variation-settings: normal;
-    font-size: 1em;
-}
-
-strong {
-    font-weight: bolder;
-}
-
-dt {
-    display: block;
-    unicode-bidi: isolate;
 }
 
 .btn {
@@ -236,7 +295,11 @@ dt {
     margin-left: auto;
     margin-right: auto;
     border-radius: 1rem;
-    box-shadow: 0 0 #0000, 0 0 #0000, 0, 25px 50px -12px rgb(0 0 0 / 0.25);
+    box-shadow:
+        0 0 #0000,
+        0 0 #0000,
+        0,
+        25px 50px -12px rgb(0 0 0 / 0.25);
 }
 
 .subblock {
@@ -329,7 +392,12 @@ dt {
     text-align: center;
     border-radius: 1rem;
     background-color: rgb(31 41 55);
-    box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    box-shadow:
+        0 0 #0000,
+        0 0 #0000,
+        0 0 #0000,
+        0 10px 15px -3px rgb(0 0 0 / 0.1),
+        0 4px 6px -4px rgb(0 0 0 / 0.1);
     transition: all cubic-bezier(0.4, 0, 0.2, 1) 150ms;
 }
 
@@ -364,15 +432,6 @@ dt {
 
 .block--small__text {
     color: rgb(209 213 219);
-}
-
-footer {
-    background-color: rgb(31 41 55 / 0.5);
-    backdrop-filter: blur(12px);
-    color: rgb(156 163 175);
-    text-align: center;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
 }
 
 .footer-link:hover {
@@ -451,7 +510,7 @@ pre.formatted-text {
     color: transparent;
     font-weight: 700;
     font-size: 3rem;
-    line-height: 1;
+    line-height: auto;
     text-align: center;
     background-clip: text;
     background-image: linear-gradient(to right, #60a5fa, #a855f7);
@@ -472,20 +531,30 @@ pre.formatted-text {
 }
 
 .download-block--active {
+    display: grid;
+    grid-template-rows: 5.25rem 2.875rem 4.25rem auto 2.375rem;
     padding: 2.5rem;
     text-align: center;
     border-width: 1px;
     border-radius: 1rem;
     border-color: rgb(55 65 81);
     background-color: rgb(31 41 55);
-    box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    box-shadow:
+        0 0 #0000,
+        0 0 #0000,
+        0 25px 50px -12px rgb(0 0 0 / 0.25);
 }
 
 .download-block {
+    display: grid;
+    grid-template-rows: 5.25rem 2.875rem 4.25rem auto 2.375rem;
     opacity: 0.6;
     text-align: center;
     padding: 2.5rem;
-    box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    box-shadow:
+        0 0 #0000,
+        0 0 #0000,
+        0 25px 50px -12px rgb(0 0 0 / 0.25);
     background-color: rgb(31 41 55 / 0.5);
     border-color: rgb(31 41 55);
     border-width: 1px;
@@ -493,7 +562,6 @@ pre.formatted-text {
 }
 
 .download-os-icon {
-    margin-bottom: 1.5rem;
     font-size: 3.75rem;
     line-height: 1;
 }
@@ -507,14 +575,12 @@ pre.formatted-text {
 }
 
 .download-os-title {
-    margin-bottom: 1rem;
     font-size: 1.875rem;
     font-weight: 700;
     line-height: 2.25rem;
 }
 
 .download-os-support {
-    margin-bottom: 2rem;
     color: rgb(209 213 219);
 }
 
@@ -529,7 +595,11 @@ pre.formatted-text {
     line-height: 1.75rem;
     background-image: linear-gradient(to right, #16a34a, #15803d);
     border-radius: 0.75rem;
-    box-shadow: 0 0 #0000, 0 0 #0000, 0 10px 16px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    box-shadow:
+        0 0 #0000,
+        0 0 #0000,
+        0 10px 16px -3px rgb(0 0 0 / 0.1),
+        0 4px 6px -4px rgb(0 0 0 / 0.1);
     transition: all cubic-bezier(0.4, 0, 0.2, 1) 150ms;
 }
 
@@ -578,7 +648,11 @@ pre.formatted-text {
     line-height: 1.75rem;
     background-image: linear-gradient(to right, #9333ea, #db2777);
     border-radius: 0.75rem;
-    box-shadow: 0 0 #0000, 0 0 #0000, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    box-shadow:
+        0 0 #0000,
+        0 0 #0000,
+        0 10px 15px -3px rgb(0 0 0 / 0.1),
+        0 4px 6px -4px rgb(0 0 0 / 0.1);
     transition: all cubic-bezier(0.4, 0, 0.2, 1) 150ms;
 }
 
