@@ -1,7 +1,7 @@
 console.log("Fetching readme.md...");
 
 async function getReadme() {
-    let response = await fetch("http://127.0.0.1:5500/readme.md");
+    let response = await fetch("../../readme.md");
     let data = await response.text();
 
     return data;
