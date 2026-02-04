@@ -1,14 +1,15 @@
 console.log("Fetching readme.md...");
 
 async function getReadme() {
-    let response = await fetch("../../readme.md");
+    let response = await fetch("https://raw.githubusercontent.com/Kicked-Out/KeyFlip/main/README.md");
     let data = await response.text();
 
     return data;
 }
 
 async function splitText(data) {
-    let textList = data.split("\r\n");
+    let textList = data.split("\n");
+    textList = textList.filter((line) => line.trim() != "");
 
     return textList;
 }
@@ -139,13 +140,13 @@ async function convertDataToHTML(data) {
                 tableMode = false;
                 line = line.replace("#### ", "");
                 let h4Text = await parseLine(line);
-                addElementToHTML("h3", "section-subtitle", h4Text);
+                addElementToHTML("h3", "section-subsection", h4Text);
                 break;
             case line.startsWith("###"):
                 tableMode = false;
                 line = line.replace("### ", "");
                 text = await parseLine(line);
-                addElementToHTML("h3", "section-subtitle", text);
+                addElementToHTML("h3", "section-subsection", text);
                 break;
             case line.startsWith("##"):
                 tableMode = false;
