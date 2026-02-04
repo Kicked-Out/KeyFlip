@@ -109,6 +109,7 @@ footer {
 table {
     width: 100%;
     border-collapse: collapse;
+    margin: 2rem 0;
 }
 
 thead > tr {
@@ -120,7 +121,7 @@ tr {
 }
 
 tr:nth-child(even) {
-    background-color: rgb(31 41 55);
+    background-color: rgb(34, 44, 58);
     border-color: rgb(55 65 81);
 }
 
@@ -165,6 +166,20 @@ ul.nav-list > li {
     line-height: 2.25rem;
 }
 
+.section-subtitle {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: rgb(209 213 219);
+}
+
+.section-subsection {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    color: rgb(209 213 219);
+}
+
 .section-text:first-of-type {
     margin: 0;
 }
@@ -190,7 +205,8 @@ ul.nav-list > li {
 }
 
 .section-separator {
-    border-top: 1px solid;
+    margin: 1.5rem 0;
+    border-top: 2px solid;
     border-color: rgb(30, 41, 65) !important;
 }
 
@@ -338,7 +354,7 @@ a.nav-item:hover {
     padding-bottom: 0.25rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-    background-color: rgb(31 41 55);
+    background-color: rgb(39, 50, 66);
     border-radius: 0.25rem;
 }
 
@@ -440,7 +456,7 @@ a.nav-item:hover {
 
 .example-block {
     padding: 2rem;
-    background-color: rgb(31 41 55);
+    background-color: rgb(39, 50, 66);
     border-radius: 0.75rem;
 }
 
